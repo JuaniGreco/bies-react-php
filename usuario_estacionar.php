@@ -16,24 +16,23 @@ if ($conn->connect_error) {
 
 //--------En produccion-------
 
-$idUsuario= $_POST['Id_Usuario']; 
+//$idUsuario= $_POST['Id_Usuario']; 
 date_default_timezone_set("America/Argentina/Buenos_Aires");
 $HoraActual = date_create();
 $HoraActual = date_format($HoraActual, 'H:i:s');
 $FechaActual = date("Y-m-d");
-$idPlayaDeEstacionamiento = $_POST['idPlayaEstacionamiento'];
-$idEstacionamientoHorario = $_POST('idHorario');
-$idPlayaDeEstacionamientoHorario = $_POST('idPlayaEstacionamientoHorario');
+//$idPlayaDeEstacionamiento = $_POST['idPlayaEstacionamiento'];
+//$idEstacionamientoHorario = $_POST('idHorario');
+//$idPlayaDeEstacionamientoHorario = $_POST('idPlayaEstacionamientoHorario');*/
 
 
 //---------En prueba----------
-/*$idUsuario = 3;
-$HoraActual = date_create();
+$idUsuario = 3;
+/*$HoraActual = date_create();
 $HoraActual = '11:30:20';
 $FechaActual = date("Y-m-d");
 $idPlayaDeEstacionamiento = '1';
-$diaSemana = date('w');
-*/
+$diaSemana = date('w');*/
 
 
 
@@ -42,7 +41,7 @@ $diaSemana = date('w');
 
 //Consulta sql para estacionar un vehiculo EN EL ESTACIONAMIENTO CON ID = 1;
 
-if (($HoraActual > "00:00:00") and ($HoraActual < "23:59:59")) {
+/*if (($HoraActual > "00:00:00") and ($HoraActual < "23:59:59")) {
     $sql="INSERT INTO `estacionamiento`(`idUsuario`, `idPlayaDeEstacionamiento`, `idPlayaDeEstacionamientoHorario`, `fechaEstacionamiento`, 
     `horaInicioEstacionamiento`) 
     VALUES ($idUsuario, $idPlayaDeEstacionamiento, '(SELECT playadeestacionamientohorario.idHorario
@@ -51,16 +50,18 @@ WHERE '$HoraActual' BETWEEN playadeestacionamientohorario.horaInicio and playade
 and playadeestacionamientohorario.diaSemana = $diaSemana and playadeestacionamientohorario.idPlayaDeEstacionamiento = $idPlayaDeEstacionamiento)',
 '$FechaActual', '$HoraActual'";    
 } else {};
+*/
 
 
 header('Content-Type: application/json');
 //Ejecuta la consulta
-if ($resultado = $conn->query($sql)){
-    echo json_encode('Ok', JSON_FORCE_OBJECT); 
+/*if ($resultado = $conn->query($sql)){
+    echo json_encode($idUsuario, JSON_FORCE_OBJECT); 
 } else {
     echo json_encode('ERROR', JSON_FORCE_OBJECT);
 }
-//echo ("pase la ejecucion");
+*/
+echo (json_encode($idUsuario, JSON_FORCE_OBJECT));
 
 //Arma la cabecera "json"
 header('Content-Type: application/json');
