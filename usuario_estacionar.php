@@ -5,7 +5,7 @@ header('Access-Control-Allow-Origin: *');
 
 //Conexion a la base de datos MySql
 include "conectar.php";
-$conn = conectarDB();
+$conn = conectarDB(); 
 if ($conn->connect_error) {
 	die("Connection failed: " . $conn->connect_error);
 }
