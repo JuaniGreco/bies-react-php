@@ -15,7 +15,7 @@ if ($conn->connect_error) {
 //Definicion de variables recibidas del post
 
 //--------En produccion-------
-
+/*
 $idUsuario= $_POST['Id_Usuario']; 
 date_default_timezone_set("America/Argentina/Buenos_Aires");
 $HoraActual = date_create();
@@ -24,16 +24,16 @@ $FechaActual = date("Y-m-d");
 $idPlayaDeEstacionamiento = $_POST['idPlayaEstacionamiento'];
 $idEstacionamientoHorario = $_POST('idHorario');
 $idPlayaDeEstacionamientoHorario = $_POST('idPlayaEstacionamientoHorario');
-
+*/
 
 //---------En prueba----------
-/*$idUsuario = 3;
+$idUsuario = 27;
 $HoraActual = date_create();
 $HoraActual = '11:30:20';
 $FechaActual = date("Y-m-d");
-$idPlayaDeEstacionamiento = '1';
+$idPlayaDeEstacionamiento = '12';
 $diaSemana = date('w');
-*/
+
 
 
 
