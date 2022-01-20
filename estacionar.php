@@ -1,58 +1,69 @@
 <?php
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Headers: access");
+header("Access-Control-Allow-Methods: GET,POST");
+header("Content-Type: application/json; charset=UTF-8");
+header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
-//Permite el acceso desde cualquier origen
-header('Access-Control-Allow-Origin: *');
 
-//Conexion a la base de datos MySql
-include "conectar.php";
-$conn = conectarDB();
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+// Conecta a la base de datos  con usuario, contraseña y nombre de la BD
+$servidor = "localhost"; $usuario = "root"; $contrasenia = ""; $nombreBaseDatos = "bies-react";
+$conexionBD = new mysqli($servidor, $usuario, $contrasenia, $nombreBaseDatos);
 //echo "pase la conexion::::  ";
 
+    //Definicion de variables recibidas del post
 
-//Definicion de variables recibidas del post
+    //--------En produccion-------
 
-//--------En produccion-------
-
-/* $idUsuario= $_POST['Id_Usuario']; 
-date_default_timezone_set("America/Argentina/Buenos_Aires");
-$horaActual = date_create();
-$horaActual = date_format($horaActual, 'H:i:s');
-$fechaActual = date("Y-m-d");
-$idPlayaDeEstacionamiento = $_POST['idPlayaEstacionamiento'];
-$idEstacionamientoHorario = $_POST('idHorario');
-$idPlayaDeEstacionamientoHorario = $_POST('idPlayaEstacionamientoHorario');*/
-
-
-//---------En prueba----------
-
-$idUsuario = 3;
-date_default_timezone_set("America/Argentina/Buenos_Aires");
-$horaActual = date_create();
-$horaActual = date_format($horaActual, 'H:i:s');
-$fechaActual = date("Y-m-d");
-$idPlayaDeEstacionamiento = '1';
-$diaSemana = date('w');
+    /* $idUsuario= $_POST['Id_Usuario']; 
+    date_default_timezone_set("America/Argentina/Buenos_Aires");
+    $horaActual = date_create();
+    $horaActual = date_format($horaActual, 'H:i:s');
+    $fechaActual = date("Y-m-d");
+    $idPlayaDeEstacionamiento = $_POST['idPlayaEstacionamiento'];
+    $idEstacionamientoHorario = $_POST('idHorario');
+    $idPlayaDeEstacionamientoHorario = $_POST('idPlayaEstacionamientoHorario');*/
 
 
+    //---------En prueba----------
 
+    /*$idUsuario = 34;
+    date_default_timezone_set("America/Argentina/Buenos_Aires");
+    $horaActual = date_create();
+    $horaActual = date_format($horaActual, 'H:i:s');
+    $fechaActual = date("Y-m-d");
+    $idPlayaDeEstacionamiento = '1';
+    $diaSemana = date('w');*/
+    if(isset($_GET["estacionar"])){
+        $data = json_decode(file_get_contents("php://input"));
+        $idUsuario=$data->idUsuario;
+        /*$idUsuario='34';*/
+        date_default_timezone_set("America/Argentina/Buenos_Aires");
+        $horaActual=date_create();
+        $horaActual=date_format($horaActual, 'H:i:s');
+        $fechaActual=date("Y-m-d");
+        $idPlayaDeEstacionamiento=$data->idPlayaDeEstacionamiento;
+        $idPlayaDeEstacionamiento=$_GET["estacionar"];
+        $idUsuario=$_GET["idUsuario"];
+        /*$idPlayaDeEstacionamiento='1';*/
+        $diaSemana=date('w');
+        //error_log ($idUsuario, 3, 'D:\Escritorio\linea48.txt');
 
-//error_log ($idPlayaDeEstacionamientoHorario, 3, 'D:\ID.txt');
-//Consulta sql para estacionar un vehiculo EN EL ESTACIONAMIENTO CON ID = 1;
+        if (($horaActual > "00:00:00") and ($horaActual < "23:59:59")) {
+            $sql = mysqli_query($conexionBD,"INSERT INTO `estacionamiento`(`idUsuario`, `idPlayaDeEstacionamiento`, `idPlayaDeEstacionamientoHorario`, `fechaEstacionamiento`, 
+                `horaInicioEstacionamiento`) 
+                VALUES ($idUsuario, $idPlayaDeEstacionamiento, (SELECT playadeestacionamientohorario.idHorario
+                FROM `playadeestacionamientohorario` 
+                WHERE '$horaActual' BETWEEN playadeestacionamientohorario.horaInicio and playadeestacionamientohorario.horaFin 
+                and playadeestacionamientohorario.diaSemana = $diaSemana and playadeestacionamientohorario.idPlayaDeEstacionamiento = $idPlayaDeEstacionamiento),
+                '$fechaActual', '$horaActual')");
 
-
-if (($horaActual > "00:00:00") and ($horaActual < "23:59:59")) {
-        $sql = "INSERT INTO `estacionamiento`(`idUsuario`, `idPlayaDeEstacionamiento`, `idPlayaDeEstacionamientoHorario`, `fechaEstacionamiento`, 
-        `horaInicioEstacionamiento`) 
-        VALUES ($idUsuario, $idPlayaDeEstacionamiento, (SELECT playadeestacionamientohorario.idHorario
-        FROM `playadeestacionamientohorario` 
-        WHERE '$horaActual' BETWEEN playadeestacionamientohorario.horaInicio and playadeestacionamientohorario.horaFin 
-        and playadeestacionamientohorario.diaSemana = $diaSemana and playadeestacionamientohorario.idPlayaDeEstacionamiento = $idPlayaDeEstacionamiento),
-        '$fechaActual', '$horaActual')";
-} else {
-};
+                echo json_encode(["success"=>1]);
+        } else {
+        };
+      
+        exit();
+    }
 
 
 /*
@@ -64,7 +75,7 @@ error_log($idPlayaDeEstacionamiento, 3, 'D:\idPlaya.txt');
 */
 
 
-header('Content-Type: application/json');
+/*header('Content-Type: application/json');
 //Ejecuta la consulta
 if ($resultado = $conn->query($sql)) {
     echo json_encode('Ok', JSON_FORCE_OBJECT);
@@ -91,4 +102,5 @@ header('Content-Type: application/json');
 //Codifica y retorna en formato json el array
 
 //cierra la conexion
-$conn->close();
+$conn->close();*/
+?>
