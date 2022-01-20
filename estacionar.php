@@ -9,6 +9,8 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 // Conecta a la base de datos  con usuario, contraseña y nombre de la BD
 $servidor = "localhost"; $usuario = "root"; $contrasenia = ""; $nombreBaseDatos = "bies-react";
 $conexionBD = new mysqli($servidor, $usuario, $contrasenia, $nombreBaseDatos);
+date_default_timezone_set("America/Argentina/Buenos_Aires");
+
 //echo "pase la conexion::::  ";
 
     //Definicion de variables recibidas del post
@@ -61,9 +63,27 @@ $conexionBD = new mysqli($servidor, $usuario, $contrasenia, $nombreBaseDatos);
                 echo json_encode(["success"=>1]);
         } else {
         };
-      
         exit();
     }
+
+    if(isset($_GET["desestacionar"])){
+        $data = json_decode(file_get_contents("php://input"));
+        $idUsuario=$data->idUsuario;
+        $idUsuario=$_GET["idUsuario"];
+        /*$idUsuario='34';*/
+        $horaActual=date_create();
+        $horaActual=date_format($horaActual, 'H:i:s');
+        $fechaActual=date("Y-m-d");
+    
+    
+    $sql = $sql = mysqli_query($conexionBD,"UPDATE `estacionamiento` e
+    SET e.horaFinEstacionamiento= '$horaActual'
+        WHERE
+        e.idUsuario = '$idUsuario' and e.fechaEstacionamiento = '$fechaActual' and e.horaFinEstacionamiento is null"); 
+    echo json_encode(["success"=>1]);
+    } else {};
+    exit();
+
 
 
 /*
