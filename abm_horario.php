@@ -14,7 +14,7 @@ $conexionBD = new mysqli($servidor, $usuario, $contrasenia, $nombreBaseDatos);
 
 // Consulta datos y recepciona una clave para consultar dichos datos con dicha clave
 if (isset($_GET["consultar"])){
-    $sqlEstacionamientoHorario = mysqli_query($conexionBD,"SELECT * FROM playadeestacionamientohorario WHERE idPlayaDeEstacionamiento=".$_GET["consultar"]);
+    $sqlEstacionamientoHorario = mysqli_query($conexionBD,"SELECT * FROM playadeestacionamientohorario WHERE idHorario=".$_GET["consultar"]);
     if(mysqli_num_rows($sqlEstacionamientoHorario) > 0){
         $estacionamientoHorario = mysqli_fetch_all($sqlEstacionamientoHorario,MYSQLI_ASSOC);
         echo json_encode($estacionamientoHorario);
@@ -24,7 +24,7 @@ if (isset($_GET["consultar"])){
 }
 //borrar pero se le debe de enviar una clave ( para borrado )
 if (isset($_GET["borrar"])){
-    $sqlEstacionamientoHorario = mysqli_query($conexionBD,"DELETE FROM playadeestacionamientohorario WHERE idPlayaDeEstacionamiento=".$_GET["borrar"]);
+    $sqlEstacionamientoHorario = mysqli_query($conexionBD,"DELETE FROM playadeestacionamientohorario WHERE idHorario=".$_GET["borrar"]);
     if($sqlEstacionamientoHorario){
         echo json_encode(["success"=>1]);
         exit();
@@ -34,6 +34,7 @@ if (isset($_GET["borrar"])){
 //Inserta un nuevo registro y recepciona en método post los datos de nombre y correo
 if(isset($_GET["insertar"])){
     $data = json_decode(file_get_contents("php://input"));
+    
     $idPlayaDeEstacionamiento = $data ->idPlayaDeEstacionamiento;
     $diaSemana=$data->diaSemana;
     $horaInicio=$data->horaInicio;
@@ -51,13 +52,13 @@ if(isset($_GET["actualizar"])){
     
     $data = json_decode(file_get_contents("php://input"));
 
-    $idPlayaDeEstacionamientohorario=(isset($data->idPlayaDeEstacionamientohorario))?$data->idPlayaDeEstacionamientohorario:$_GET["actualizar"];
+    $idHorario=(isset($data->idHorario))?$data->idHorario:$_GET["actualizar"];
     $idPlayaDeEstacionamiento=$data->idPlayaDeEstacionamiento;
     $diaSemana = $data->diaSemana;
     $horaInicio=$data->horaInicio;
     $horaFin = $data->horaFin;
     
-    $sqlEstacionamientoHorario = mysqli_query($conexionBD,"UPDATE playadeestacionamientohorario SET diaSemana= '$diaSemana', horaInicio = '$horaInicio', horaFin = '$horaFin' WHERE idPlayaDeEstacionamiento='$idPlayaDeEstacionamiento'");
+    $sqlEstacionamientoHorario = mysqli_query($conexionBD,"UPDATE playadeestacionamientohorario SET diaSemana= '$diaSemana', horaInicio = '$horaInicio', horaFin = '$horaFin' WHERE idHorario='$idHorario'");
     echo json_encode(["success"=>1]);
     exit();
 }
