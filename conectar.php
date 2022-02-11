@@ -7,8 +7,8 @@ $method = $_SERVER['REQUEST_METHOD'];
 function conectarDB(){
     $servidor = "localhost";
     $usuario = "root";
-    $password = "";
-    $bd = "bies-react";
+    $password = "wAcR7(XgzFuCRwn%";
+    $bd = "id18437891_biesreact";
     $conexion = mysqli_connect($servidor, $usuario, $password,$bd);
     
         if($conexion){

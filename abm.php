@@ -5,11 +5,17 @@ header("Access-Control-Allow-Methods: GET,POST");
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
-
+/*
 // Conecta a la base de datos  con usuario, contraseña y nombre de la BD
 $servidor = "localhost"; $usuario = "root"; $contrasenia = ""; $nombreBaseDatos = "bies-react";
 $conexionBD = new mysqli($servidor, $usuario, $contrasenia, $nombreBaseDatos);
+*/
 
+include "conectar.php";
+$conexionBD = conectarDB();
+if ($conexionBD->connect_error) {
+	die("Connection failed: " . $conexionBD->connect_error);
+}
 
 
 // Consulta datos y recepciona una clave para consultar dichos datos con dicha clave

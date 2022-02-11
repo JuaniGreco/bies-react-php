@@ -7,16 +7,22 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 
 
 // Conecta a la base de datos  con usuario, contraseña y nombre de la BD
+/*
 $servidor = "localhost"; $usuario = "root"; $contrasenia = ""; $nombreBaseDatos = "bies-react";
 $conexionBD = new mysqli($servidor, $usuario, $contrasenia, $nombreBaseDatos);
 date_default_timezone_set("America/Argentina/Buenos_Aires");
+*/
+
+include "conectar.php";
+$conexionBD = conectarDB();
+if ($conexionBD->connect_error) {
+	die("Connection failed: " . $conexionBD->connect_error);
+}
 
 //echo "pase la conexion::::  ";
 
     //Definicion de variables recibidas del post
-
     //--------En produccion-------
-
     /* $idUsuario= $_POST['Id_Usuario']; 
     date_default_timezone_set("America/Argentina/Buenos_Aires");
     $horaActual = date_create();
@@ -28,7 +34,6 @@ date_default_timezone_set("America/Argentina/Buenos_Aires");
 
 
     //---------En prueba----------
-
     /*$idUsuario = 34;
     date_default_timezone_set("America/Argentina/Buenos_Aires");
     $horaActual = date_create();
@@ -36,6 +41,8 @@ date_default_timezone_set("America/Argentina/Buenos_Aires");
     $fechaActual = date("Y-m-d");
     $idPlayaDeEstacionamiento = '1';
     $diaSemana = date('w');*/
+
+
     if(isset($_GET["estacionar"])){
         $data = json_decode(file_get_contents("php://input"));
         $idUsuario=$data->idUsuario;
