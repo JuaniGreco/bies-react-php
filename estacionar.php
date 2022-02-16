@@ -50,8 +50,11 @@ date_default_timezone_set("America/Argentina/Buenos_Aires");
         /*$idPlayaDeEstacionamiento='1';*/
         $diaSemana=date('w');
         //error_log ($idUsuario, 3, 'D:\Escritorio\linea48.txt');
+        $sql2 = mysqli_query($conexionBD, "SELECT * FROM estacionamiento e WHERE e.idUsuario = $idUsuario and e.fechaEstacionamiento = $fechaActual and e.horaFinEstacionamiento is null");
+        $resultado2 = mysqli_num_rows($sql2);
 
-        if (($horaActual > "00:00:00") and ($horaActual < "23:59:59")) {
+        if ($resultado2 == 0) {
+        //if (($horaActual > "00:00:00") and ($horaActual < "23:59:59")) {
             $sql = mysqli_query($conexionBD,"INSERT INTO `estacionamiento`(`idUsuario`, `idPlayaDeEstacionamiento`, `idPlayaDeEstacionamientoHorario`, `fechaEstacionamiento`, 
                 `horaInicioEstacionamiento`) 
                 VALUES ($idUsuario, $idPlayaDeEstacionamiento, (SELECT playadeestacionamientohorario.idHorario
