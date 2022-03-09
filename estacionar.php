@@ -65,7 +65,7 @@ date_default_timezone_set("America/Argentina/Buenos_Aires");
                 '$fechaActual', '$horaActual')");
 
                 echo json_encode(["success"=>1]);
-        } else {
+        } else {// puede traer error, manda 0 al front
                 echo json_encode(["success"=>0]);
         };
         exit();
