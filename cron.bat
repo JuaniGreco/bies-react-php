@@ -1,0 +1,1 @@
+D:\wamp64\bin\php\php7.4.9\php.exe -f D:\wamp64\www\bies-react\resetearLugaresLibres.php

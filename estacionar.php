@@ -63,7 +63,10 @@ date_default_timezone_set("America/Argentina/Buenos_Aires");
                 WHERE '$horaActual' BETWEEN playadeestacionamientohorario.horaInicio and playadeestacionamientohorario.horaFin 
                 and playadeestacionamientohorario.diaSemana = $diaSemana and playadeestacionamientohorario.idPlayaDeEstacionamiento = $idPlayaDeEstacionamiento),
                 '$fechaActual', '$horaActual')");
-
+            
+            //RESTO UNO A LA CAPACIDAD DE LUGARES LIBRES
+            $sql2= mysqli_query ($conexionBD, "UPDATE `playadeestacionamiento` SET `lugaresLibres` = lugaresLibres - 1 WHERE idPlayaDeEstacionamiento = $idPlayaDeEstacionamiento");
+            
                 echo json_encode(["success"=>1]);
         } else {// puede traer error, manda 0 al front
                 echo json_encode(["success"=>0]);
