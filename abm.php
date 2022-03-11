@@ -41,7 +41,7 @@ if(isset($_GET["insertar"])){
     $mapa=$data->mapa;
 
         if(($nombrePlayaDeEstacionamiento!="")&&($ubicacion!="")&&($capacidad!="")&&($observaciones!="")&&($mapa!="")){            
-            $sqlEstacionamiento = mysqli_query($conexionBD,"INSERT INTO playadeestacionamiento(nombrePlayaDeEstacionamiento, ubicacion, capacidad, observaciones, mapa) VALUES ('$nombrePlayaDeEstacionamiento', '$ubicacion', '$capacidad', '$observaciones', '$mapa')");
+            $sqlEstacionamiento = mysqli_query($conexionBD,"INSERT INTO playadeestacionamiento(nombrePlayaDeEstacionamiento, ubicacion, capacidad, observaciones, mapa, lugaresLibres) VALUES ('$nombrePlayaDeEstacionamiento', '$ubicacion', '$capacidad', '$observaciones', '$mapa', '$capacidad')");
             echo json_encode(["success"=>1]);
         }
     exit();
