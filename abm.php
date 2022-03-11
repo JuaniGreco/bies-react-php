@@ -58,7 +58,7 @@ if(isset($_GET["actualizar"])){
     $observaciones=$data->observaciones;
     $mapa=$data->mapa;
     
-    $sqlEmpleaados = mysqli_query($conexionBD,"UPDATE playadeestacionamiento SET nombrePlayaDeEstacionamiento= '$nombrePlayaDeEstacionamiento',ubicacion='$ubicacion',capacidad='$capacidad',observaciones='$observaciones',mapa='$mapa' WHERE idPlayaDeEstacionamiento='$idPlayaDeEstacionamiento'");
+    $sqlEmpleaados = mysqli_query($conexionBD,"UPDATE playadeestacionamiento SET nombrePlayaDeEstacionamiento= '$nombrePlayaDeEstacionamiento',ubicacion='$ubicacion',capacidad='$capacidad',observaciones='$observaciones',mapa='$mapa', lugaresLibres='$capacidad' WHERE idPlayaDeEstacionamiento='$idPlayaDeEstacionamiento'");
     echo json_encode(["success"=>1]);
     exit();
 }
