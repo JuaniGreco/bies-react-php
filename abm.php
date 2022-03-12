@@ -41,7 +41,7 @@ if(isset($_GET["insertar"])){
     $mapa=$data->mapa;
 
         if(($nombrePlayaDeEstacionamiento!="")&&($ubicacion!="")&&($capacidad!="")&&($observaciones!="")&&($mapa!="")){            
-            $sqlEstacionamiento = mysqli_query($conexionBD,"INSERT INTO playadeestacionamiento(nombrePlayaDeEstacionamiento, ubicacion, capacidad, observaciones, mapa, lugaresLibres) VALUES ('$nombrePlayaDeEstacionamiento', '$ubicacion', '$capacidad', '$observaciones', '$mapa', '$capacidad')");
+            $sqlEstacionamiento = mysqli_query($conexionBD,"INSERT INTO playadeestacionamiento(nombrePlayaDeEstacionamiento, ubicacion, capacidad, observaciones, mapa, lugaresLibres) VALUES ('$nombrePlayaDeEstacionamiento', '$ubicacion', '$capacidad', '$observaciones', '$mapa', $capacidad)");
             echo json_encode(["success"=>1]);
         }
     exit();
@@ -58,7 +58,7 @@ if(isset($_GET["actualizar"])){
     $observaciones=$data->observaciones;
     $mapa=$data->mapa;
     
-    $sqlEmpleaados = mysqli_query($conexionBD,"UPDATE playadeestacionamiento SET nombrePlayaDeEstacionamiento= '$nombrePlayaDeEstacionamiento',ubicacion='$ubicacion',capacidad='$capacidad',observaciones='$observaciones',mapa='$mapa', lugaresLibres='$capacidad' WHERE idPlayaDeEstacionamiento='$idPlayaDeEstacionamiento'");
+    $sqlEmpleaados = mysqli_query($conexionBD,"UPDATE playadeestacionamiento SET nombrePlayaDeEstacionamiento= '$nombrePlayaDeEstacionamiento',ubicacion='$ubicacion',capacidad='$capacidad',observaciones='$observaciones',mapa='$mapa', lugaresLibres= $capacidad WHERE idPlayaDeEstacionamiento='$idPlayaDeEstacionamiento'");
     echo json_encode(["success"=>1]);
     exit();
 }
