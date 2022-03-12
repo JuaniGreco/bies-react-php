@@ -1,15 +1,15 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.0
+-- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
--- Servidor: 127.0.0.1
--- Tiempo de generación: 08-02-2022 a las 22:50:34
--- Versión del servidor: 10.4.18-MariaDB
--- Versión de PHP: 8.0.5
+-- Servidor: 127.0.0.1:3306
+-- Tiempo de generación: 12-03-2022 a las 00:16:07
+-- Versión del servidor: 8.0.21
+-- Versión de PHP: 7.4.9
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
-SET time_zone = "-3:00";
+SET time_zone = "+00:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -27,15 +27,20 @@ SET time_zone = "-3:00";
 -- Estructura de tabla para la tabla `estacionamiento`
 --
 
-CREATE TABLE `estacionamiento` (
-  `idEstacionamiento` int(11) NOT NULL,
-  `idUsuario` int(11) NOT NULL,
-  `idPlayaDeEstacionamiento` int(11) NOT NULL,
-  `idPlayaDeEstacionamientoHorario` int(11) NOT NULL,
+DROP TABLE IF EXISTS `estacionamiento`;
+CREATE TABLE IF NOT EXISTS `estacionamiento` (
+  `idEstacionamiento` int NOT NULL AUTO_INCREMENT,
+  `idUsuario` int NOT NULL,
+  `idPlayaDeEstacionamiento` int NOT NULL,
+  `idPlayaDeEstacionamientoHorario` int NOT NULL,
   `fechaEstacionamiento` date NOT NULL,
   `horaInicioEstacionamiento` time NOT NULL,
-  `horaFinEstacionamiento` time DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  `horaFinEstacionamiento` time DEFAULT NULL,
+  PRIMARY KEY (`idEstacionamiento`),
+  KEY `fk_idPlayaDeEstacionamiento` (`idPlayaDeEstacionamiento`),
+  KEY `fk_idPlayaDeEstacionamientoHorario` (`idPlayaDeEstacionamientoHorario`),
+  KEY `fk_idUsuario` (`idUsuario`)
+) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `estacionamiento`
@@ -43,7 +48,13 @@ CREATE TABLE `estacionamiento` (
 
 INSERT INTO `estacionamiento` (`idEstacionamiento`, `idUsuario`, `idPlayaDeEstacionamiento`, `idPlayaDeEstacionamientoHorario`, `fechaEstacionamiento`, `horaInicioEstacionamiento`, `horaFinEstacionamiento`) VALUES
 (53, 34, 1, 24, '2022-02-08', '14:57:34', '14:57:46'),
-(54, 34, 1, 24, '2022-02-08', '17:13:34', '17:13:38');
+(54, 34, 1, 24, '2022-02-08', '17:13:34', '17:13:38'),
+(60, 34, 1, 27, '2022-03-11', '20:02:00', '20:40:53'),
+(61, 34, 1, 27, '2022-03-11', '20:41:36', '20:43:07'),
+(63, 34, 1, 27, '2022-03-11', '20:46:19', '20:48:41'),
+(64, 34, 1, 27, '2022-03-11', '20:48:45', '20:53:07'),
+(65, 34, 1, 27, '2022-03-11', '20:54:05', '20:54:09'),
+(66, 34, 1, 27, '2022-03-11', '20:54:44', '21:12:35');
 
 -- --------------------------------------------------------
 
@@ -51,22 +62,25 @@ INSERT INTO `estacionamiento` (`idEstacionamiento`, `idUsuario`, `idPlayaDeEstac
 -- Estructura de tabla para la tabla `playadeestacionamiento`
 --
 
-CREATE TABLE `playadeestacionamiento` (
-  `idPlayaDeEstacionamiento` int(11) NOT NULL,
-  `nombrePlayaDeEstacionamiento` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `ubicacion` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
-  `capacidad` int(11) NOT NULL,
-  `observaciones` varchar(2000) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `mapa` varchar(10000) COLLATE utf8_unicode_ci DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+DROP TABLE IF EXISTS `playadeestacionamiento`;
+CREATE TABLE IF NOT EXISTS `playadeestacionamiento` (
+  `idPlayaDeEstacionamiento` int NOT NULL AUTO_INCREMENT,
+  `nombrePlayaDeEstacionamiento` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `ubicacion` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `capacidad` int NOT NULL,
+  `observaciones` varchar(2000) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `mapa` varchar(10000) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `lugaresLibres` int NOT NULL,
+  PRIMARY KEY (`idPlayaDeEstacionamiento`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `playadeestacionamiento`
 --
 
-INSERT INTO `playadeestacionamiento` (`idPlayaDeEstacionamiento`, `nombrePlayaDeEstacionamiento`, `ubicacion`, `capacidad`, `observaciones`, `mapa`) VALUES
-(1, 'Supermercado Dar', 'San Jeronimo y Tucuman', 10, 'Techado', 'https://goo.gl/maps/RENstzUGoocLY8rL8'),
-(2, 'Tucuman', 'Tucuman y San Martin', 100, 'Varios pisos', 'https://goo.gl/maps/3hkdT6aXGuq79NJi7');
+INSERT INTO `playadeestacionamiento` (`idPlayaDeEstacionamiento`, `nombrePlayaDeEstacionamiento`, `ubicacion`, `capacidad`, `observaciones`, `mapa`, `lugaresLibres`) VALUES
+(1, 'Supermercado Dar', 'San Jeronimo y Tucuman', 20, 'Techado', 'https://goo.gl/maps/RENstzUGoocLY8rL8', 20),
+(2, 'Tucuman', 'Tucuman y San Martin', 100, 'Varios pisos', 'https://goo.gl/maps/3hkdT6aXGuq79NJi7', 99);
 
 -- --------------------------------------------------------
 
@@ -74,13 +88,16 @@ INSERT INTO `playadeestacionamiento` (`idPlayaDeEstacionamiento`, `nombrePlayaDe
 -- Estructura de tabla para la tabla `playadeestacionamientohorario`
 --
 
-CREATE TABLE `playadeestacionamientohorario` (
-  `idHorario` int(11) NOT NULL,
-  `idPlayaDeEstacionamiento` int(11) NOT NULL,
-  `diaSemana` int(11) NOT NULL,
+DROP TABLE IF EXISTS `playadeestacionamientohorario`;
+CREATE TABLE IF NOT EXISTS `playadeestacionamientohorario` (
+  `idHorario` int NOT NULL AUTO_INCREMENT,
+  `idPlayaDeEstacionamiento` int NOT NULL,
+  `diaSemana` int NOT NULL,
   `horaInicio` time NOT NULL,
-  `horaFin` time NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  `horaFin` time NOT NULL,
+  PRIMARY KEY (`idHorario`),
+  KEY `fk_idPlayaDeEstacionamiento2` (`idPlayaDeEstacionamiento`)
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `playadeestacionamientohorario`
@@ -122,10 +139,12 @@ INSERT INTO `playadeestacionamientohorario` (`idHorario`, `idPlayaDeEstacionamie
 -- Estructura de tabla para la tabla `roles`
 --
 
-CREATE TABLE `roles` (
-  `idRol` int(11) NOT NULL,
-  `nombreRol` varchar(50) COLLATE utf8_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+DROP TABLE IF EXISTS `roles`;
+CREATE TABLE IF NOT EXISTS `roles` (
+  `idRol` int NOT NULL AUTO_INCREMENT,
+  `nombreRol` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`idRol`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `roles`
@@ -141,14 +160,17 @@ INSERT INTO `roles` (`idRol`, `nombreRol`) VALUES
 -- Estructura de tabla para la tabla `usuarios`
 --
 
-CREATE TABLE `usuarios` (
-  `idUsuario` int(11) NOT NULL,
-  `nombre` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `dni` int(11) NOT NULL,
-  `clave` varchar(1000) COLLATE utf8_unicode_ci NOT NULL,
-  `email` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `idRol` int(11) NOT NULL DEFAULT 2
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+DROP TABLE IF EXISTS `usuarios`;
+CREATE TABLE IF NOT EXISTS `usuarios` (
+  `idUsuario` int NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `dni` int NOT NULL,
+  `clave` varchar(1000) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `email` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `idRol` int NOT NULL DEFAULT '2',
+  PRIMARY KEY (`idUsuario`),
+  KEY `fk_idRol` (`idRol`)
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `usuarios`
@@ -157,79 +179,6 @@ CREATE TABLE `usuarios` (
 INSERT INTO `usuarios` (`idUsuario`, `nombre`, `dni`, `clave`, `email`, `idRol`) VALUES
 (33, 'Guido M', 123, '$2y$10$oDXzSE7gDeg5c2/dGNJMkeb.W5tm6CSA1fT62yX9zzeNKBLF6IBI.', 'prueba', 1),
 (34, 'guido', 1234, '$2y$10$N0wv7a.5zkzos0L5jxZ0W.XguKsP9nnRTcd11FitENhSDDqUpZSuG', 'prueba', 2);
-
---
--- Índices para tablas volcadas
---
-
---
--- Indices de la tabla `estacionamiento`
---
-ALTER TABLE `estacionamiento`
-  ADD PRIMARY KEY (`idEstacionamiento`),
-  ADD KEY `fk_idPlayaDeEstacionamiento` (`idPlayaDeEstacionamiento`),
-  ADD KEY `fk_idPlayaDeEstacionamientoHorario` (`idPlayaDeEstacionamientoHorario`),
-  ADD KEY `fk_idUsuario` (`idUsuario`);
-
---
--- Indices de la tabla `playadeestacionamiento`
---
-ALTER TABLE `playadeestacionamiento`
-  ADD PRIMARY KEY (`idPlayaDeEstacionamiento`);
-
---
--- Indices de la tabla `playadeestacionamientohorario`
---
-ALTER TABLE `playadeestacionamientohorario`
-  ADD PRIMARY KEY (`idHorario`),
-  ADD KEY `fk_idPlayaDeEstacionamiento2` (`idPlayaDeEstacionamiento`);
-
---
--- Indices de la tabla `roles`
---
-ALTER TABLE `roles`
-  ADD PRIMARY KEY (`idRol`);
-
---
--- Indices de la tabla `usuarios`
---
-ALTER TABLE `usuarios`
-  ADD PRIMARY KEY (`idUsuario`),
-  ADD KEY `fk_idRol` (`idRol`);
-
---
--- AUTO_INCREMENT de las tablas volcadas
---
-
---
--- AUTO_INCREMENT de la tabla `estacionamiento`
---
-ALTER TABLE `estacionamiento`
-  MODIFY `idEstacionamiento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
-
---
--- AUTO_INCREMENT de la tabla `playadeestacionamiento`
---
-ALTER TABLE `playadeestacionamiento`
-  MODIFY `idPlayaDeEstacionamiento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
---
--- AUTO_INCREMENT de la tabla `playadeestacionamientohorario`
---
-ALTER TABLE `playadeestacionamientohorario`
-  MODIFY `idHorario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
-
---
--- AUTO_INCREMENT de la tabla `roles`
---
-ALTER TABLE `roles`
-  MODIFY `idRol` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT de la tabla `usuarios`
---
-ALTER TABLE `usuarios`
-  MODIFY `idUsuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- Restricciones para tablas volcadas
