@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 12-03-2022 a las 00:16:07
+-- Tiempo de generación: 16-03-2022 a las 04:00:56
 -- Versión del servidor: 8.0.21
 -- Versión de PHP: 7.4.9
 
@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS `estacionamiento` (
   KEY `fk_idPlayaDeEstacionamiento` (`idPlayaDeEstacionamiento`),
   KEY `fk_idPlayaDeEstacionamientoHorario` (`idPlayaDeEstacionamientoHorario`),
   KEY `fk_idUsuario` (`idUsuario`)
-) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=94 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `estacionamiento`
@@ -54,7 +54,13 @@ INSERT INTO `estacionamiento` (`idEstacionamiento`, `idUsuario`, `idPlayaDeEstac
 (63, 34, 1, 27, '2022-03-11', '20:46:19', '20:48:41'),
 (64, 34, 1, 27, '2022-03-11', '20:48:45', '20:53:07'),
 (65, 34, 1, 27, '2022-03-11', '20:54:05', '20:54:09'),
-(66, 34, 1, 27, '2022-03-11', '20:54:44', '21:12:35');
+(66, 34, 1, 27, '2022-03-11', '20:54:44', '21:12:35'),
+(67, 34, 1, 24, '2022-03-15', '19:11:25', '19:11:31'),
+(68, 34, 1, 24, '2022-03-15', '19:11:36', '19:11:58'),
+(69, 34, 1, 24, '2022-03-15', '19:12:01', '19:12:05'),
+(70, 34, 1, 24, '2022-03-15', '19:46:53', '19:50:01'),
+(71, 34, 1, 24, '2022-03-15', '20:11:40', '20:11:42'),
+(93, 34, 1, 18, '2022-03-16', '00:02:27', NULL);
 
 -- --------------------------------------------------------
 
@@ -79,7 +85,7 @@ CREATE TABLE IF NOT EXISTS `playadeestacionamiento` (
 --
 
 INSERT INTO `playadeestacionamiento` (`idPlayaDeEstacionamiento`, `nombrePlayaDeEstacionamiento`, `ubicacion`, `capacidad`, `observaciones`, `mapa`, `lugaresLibres`) VALUES
-(1, 'Supermercado Dar', 'San Jeronimo y Tucuman', 20, 'Techado', 'https://goo.gl/maps/RENstzUGoocLY8rL8', 20),
+(1, 'Supermercado Dar', 'San Jeronimo y Tucuman', 20, 'Techado', 'https://goo.gl/maps/RENstzUGoocLY8rL8', 7),
 (2, 'Tucuman', 'Tucuman y San Martin', 100, 'Varios pisos', 'https://goo.gl/maps/3hkdT6aXGuq79NJi7', 99);
 
 -- --------------------------------------------------------
@@ -170,7 +176,7 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   `idRol` int NOT NULL DEFAULT '2',
   PRIMARY KEY (`idUsuario`),
   KEY `fk_idRol` (`idRol`)
-) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `usuarios`
@@ -178,7 +184,8 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
 
 INSERT INTO `usuarios` (`idUsuario`, `nombre`, `dni`, `clave`, `email`, `idRol`) VALUES
 (33, 'Guido M', 123, '$2y$10$oDXzSE7gDeg5c2/dGNJMkeb.W5tm6CSA1fT62yX9zzeNKBLF6IBI.', 'prueba', 1),
-(34, 'guido', 1234, '$2y$10$N0wv7a.5zkzos0L5jxZ0W.XguKsP9nnRTcd11FitENhSDDqUpZSuG', 'prueba', 2);
+(34, 'guido', 1234, '$2y$10$N0wv7a.5zkzos0L5jxZ0W.XguKsP9nnRTcd11FitENhSDDqUpZSuG', 'prueba', 2),
+(39, 'JUANII', 123456, '$2y$10$Wco8g8fYOiIINJlgpH7YSOTTpcFwS64do/h4Fz8xOEJmFfx2jClp2', 'queseyo@hotmail.com', 2);
 
 --
 -- Restricciones para tablas volcadas
