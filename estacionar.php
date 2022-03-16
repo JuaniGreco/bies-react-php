@@ -10,6 +10,7 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 $servidor = "localhost"; $usuario = "root"; $contrasenia = ""; $nombreBaseDatos = "bies-react";
 $conexionBD = new mysqli($servidor, $usuario, $contrasenia, $nombreBaseDatos);
 date_default_timezone_set("America/Argentina/Buenos_Aires");
+$respuesta = "";
 
 //echo "pase la conexion::::  ";
 
@@ -38,13 +39,12 @@ date_default_timezone_set("America/Argentina/Buenos_Aires");
     $diaSemana = date('w');*/
     if(isset($_GET["estacionar"])){
         $data = json_decode(file_get_contents("php://input"));
-        $idUsuario=$data->idUsuario;
+        //$idUsuario=$data->idUsuario;
         /*$idUsuario='34';*/
         date_default_timezone_set("America/Argentina/Buenos_Aires");
         $horaActual=date_create();
         $horaActual=date_format($horaActual, 'H:i:s');
         $fechaActual=date("Y-m-d");
-        $idPlayaDeEstacionamiento=$data->idPlayaDeEstacionamiento;
         $idPlayaDeEstacionamiento=$_GET["estacionar"];
         $idUsuario=$_GET["idUsuario"];
         /*$idPlayaDeEstacionamiento='1';*/
@@ -53,6 +53,16 @@ date_default_timezone_set("America/Argentina/Buenos_Aires");
         error_log($fechaActual, 3, 'D:\fechaActual.txt');
         $sql2 = mysqli_query($conexionBD, "SELECT * FROM estacionamiento e WHERE e.idUsuario = $idUsuario and e.fechaEstacionamiento = '$fechaActual' and e.horaFinEstacionamiento is null");
         $resultado2 = mysqli_num_rows($sql2);
+        $sql3 = mysqli_query($conexionBD, "SELECT playadeestacionamientohorario.idHorario
+        FROM `playadeestacionamientohorario` 
+        WHERE '$horaActual' BETWEEN playadeestacionamientohorario.horaInicio and playadeestacionamientohorario.horaFin 
+        and playadeestacionamientohorario.diaSemana = $diaSemana and playadeestacionamientohorario.idPlayaDeEstacionamiento = $idPlayaDeEstacionamiento");
+        $resultado3 = mysqli_num_rows($sql3);
+
+        if($resultado3 == 0){
+            echo "sin_horario";
+            exit();
+        }
 
         if ($resultado2 == 0) {
         //if (($horaActual > "00:00:00") and ($horaActual < "23:59:59")) {
@@ -67,10 +77,12 @@ date_default_timezone_set("America/Argentina/Buenos_Aires");
             //RESTO UNO A LA CAPACIDAD DE LUGARES LIBRES
             $sql2= mysqli_query ($conexionBD, "UPDATE `playadeestacionamiento` SET `lugaresLibres` = (lugaresLibres - 1) WHERE idPlayaDeEstacionamiento = $idPlayaDeEstacionamiento");
             
-                echo json_encode(["success"=>1]);
+            // echo json_encode(["success"=>1]);    
+            $respuesta = "estacionado";
         } else {// puede traer error, manda 0 al front
-                echo json_encode(["success"=>0]);
+                $respuesta = "ya_estacionado";
         };
+        echo $respuesta;
         exit();
     }
 
@@ -91,6 +103,7 @@ date_default_timezone_set("America/Argentina/Buenos_Aires");
         e.idUsuario = '$idUsuario' and e.fechaEstacionamiento = '$fechaActual' and e.horaFinEstacionamiento is null"); 
     echo json_encode(["success"=>1]);
     } else {};
+    $conexionBD->close();
     exit();
 
 
