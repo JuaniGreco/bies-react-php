@@ -60,7 +60,7 @@ $respuesta = "";
         $resultado3 = mysqli_num_rows($sql3);
 
         if($resultado3 == 0){
-            echo "sin_horario";
+            echo json_encode(["data"=>"sin_horario"]);
             exit();
         }
 
@@ -82,7 +82,7 @@ $respuesta = "";
         } else {// puede traer error, manda 0 al front
                 $respuesta = "ya_estacionado";
         };
-        echo $respuesta;
+        echo json_encode(["data"=>"$respuesta"]);;
         exit();
     }
 
