@@ -11,6 +11,10 @@ $servidor = "localhost"; $usuario = "root"; $contrasenia = ""; $nombreBaseDatos 
 $conexionBD = new mysqli($servidor, $usuario, $contrasenia, $nombreBaseDatos);
 date_default_timezone_set("America/Argentina/Buenos_Aires");
 $respuesta = "";
+$fechaActual=date("Y-m-d");
+date_default_timezone_set("America/Argentina/Buenos_Aires");
+$horaActual=date_create();
+$horaActual=date_format($horaActual, 'H:i:s');
 
 //echo "pase la conexion::::  ";
 
@@ -37,20 +41,16 @@ $respuesta = "";
     $fechaActual = date("Y-m-d");
     $idPlayaDeEstacionamiento = '1';
     $diaSemana = date('w');*/
+
     if(isset($_GET["estacionar"])){
         $data = json_decode(file_get_contents("php://input"));
+        $idPlayaDeEstacionamiento=$_GET["estacionar"];
         //$idUsuario=$data->idUsuario;
         /*$idUsuario='34';*/
-        date_default_timezone_set("America/Argentina/Buenos_Aires");
-        $horaActual=date_create();
-        $horaActual=date_format($horaActual, 'H:i:s');
-        $fechaActual=date("Y-m-d");
-        $idPlayaDeEstacionamiento=$_GET["estacionar"];
         $idUsuario=$_GET["idUsuario"];
         /*$idPlayaDeEstacionamiento='1';*/
         $diaSemana=date('w');
         //error_log ($idUsuario, 3, 'D:\Escritorio\linea48.txt');
-        error_log($fechaActual, 3, 'D:\fechaActual.txt');
         $sql2 = mysqli_query($conexionBD, "SELECT * FROM estacionamiento e WHERE e.idUsuario = $idUsuario and e.fechaEstacionamiento = '$fechaActual' and e.horaFinEstacionamiento is null");
         $resultado2 = mysqli_num_rows($sql2);
         $sql3 = mysqli_query($conexionBD, "SELECT playadeestacionamientohorario.idHorario
@@ -88,21 +88,23 @@ $respuesta = "";
 
     if(isset($_GET["desestacionar"])){
         $data = json_decode(file_get_contents("php://input"));
-        $idUsuario=$data->idUsuario;
         $idUsuario=$_GET["idUsuario"];
-        /*$idUsuario='34';*/
         $horaActual=date_create();
         $horaActual=date_format($horaActual, 'H:i:s');
-        $fechaActual=date("Y-m-d");
-    
-    $sql2= mysqli_query ($conexionBD, "UPDATE playadeestacionamiento pe SET pe.lugaresLibres = (pe.lugaresLibres + 1) WHERE pe.idPlayaDeEstacionamiento = (SELECT estacionamiento.idPlayaDeEstacionamiento from estacionamiento WHERE estacionamiento.idUsuario = '$idUsuario' and estacionamiento.fechaEstacionamiento = '$fechaActual' and estacionamiento.horaFinEstacionamiento is null)");
-    
-    $sql = $sql = mysqli_query($conexionBD,"UPDATE `estacionamiento` e
-    SET e.horaFinEstacionamiento= '$horaActual'
-        WHERE
-        e.idUsuario = '$idUsuario' and e.fechaEstacionamiento = '$fechaActual' and e.horaFinEstacionamiento is null"); 
-    echo json_encode(["success"=>1]);
-    } else {};
+
+        $sql3 = mysqli_query($conexionBD, "SELECT * from estacionamiento e where e.idUsuario = $idUsuario and e.fechaEstacionamiento = '$fechaActual' and e.horaFinEstacionamiento is null");
+        $resultado3 = mysqli_num_rows($sql3);
+
+        if($resultado3 != 0){
+            $sql2= mysqli_query ($conexionBD, "UPDATE `playadeestacionamiento` SET `lugaresLibres` = (playadeestacionamiento.lugaresLibres + 1) WHERE playadeestacionamiento.idPlayaDeEstacionamiento = (SELECT estacionamiento.idPlayaDeEstacionamiento FROM estacionamiento WHERE estacionamiento.idUsuario = '34' and estacionamiento.fechaEstacionamiento = '2022-03-18' and estacionamiento.horaFinEstacionamiento is null)");
+            $sql = mysqli_query($conexionBD,"UPDATE `estacionamiento` SET `horaFinEstacionamiento` = '$horaActual' WHERE idUsuario = $idUsuario and fechaEstacionamiento = '$fechaActual' and horaFinEstacionamiento is null");
+            $respuesta = "desestacionado";
+        } else {
+            $respuesta = "no_estacionado";
+        } 
+        echo json_encode(["data"=>"$respuesta"]);
+        }      
+        
     $conexionBD->close();
     exit();
 
