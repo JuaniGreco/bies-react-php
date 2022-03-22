@@ -9,6 +9,7 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 // Conecta a la base de datos  con usuario, contraseña y nombre de la BD
 $servidor = "localhost"; $usuario = "root"; $contrasenia = ""; $nombreBaseDatos = "bies-react";
 $conexionBD = new mysqli($servidor, $usuario, $contrasenia, $nombreBaseDatos);
+$respuesta = "";
 
 function obtenerNumeroDia($nombreDelDia){
     if($nombreDelDia === "DOMINGO"){
@@ -58,21 +59,32 @@ if(isset($_GET["insertar"])){
     $nombreDia = strtoupper($nombreDia);
     $diaSemana = obtenerNumeroDia($nombreDia);
 
-    // if($nombreDia === "DOMINGO"){
-    //     $diaSemana = 0;
-    // }else if($nombreDia === "LUNES"){
-    //     $diaSemana = 1;
-    // } else if($nombreDia === "MARTES"){
-    //     $diaSemana = 2;
-    // } else if($nombreDia === "MIERCOLES"){
-    //     $diaSemana = 3;
-    // } else if($nombreDia === "JUEVES"){
-    //     $diaSemana = 4;
-    // } else if($nombreDia === "VIERNES"){
-    //     $diaSemana = 5;
-    // } else {
-    //     $diaSemana = 6;
-    // };
+    $sql2 = mysqli_query($conexionBD,"SELECT *
+    FROM `playadeestacionamientohorario` 
+    WHERE '$horaInicio' BETWEEN playadeestacionamientohorario.horaInicio and playadeestacionamientohorario.horaFin 
+    and playadeestacionamientohorario.diaSemana = $diaSemana and playadeestacionamientohorario.idPlayaDeEstacionamiento = $idPlayaDeEstacionamiento");
+
+    $resultado2 = mysqli_num_rows($sql2);
+
+    if($resultado2 > 0){
+        $respuesta = "errorHoraInicio";
+    }
+
+    $sql3 = mysqli_query($conexionBD,"SELECT *
+    FROM `playadeestacionamientohorario` 
+    WHERE '$horaFin' BETWEEN playadeestacionamientohorario.horaInicio and playadeestacionamientohorario.horaFin 
+    and playadeestacionamientohorario.diaSemana = $diaSemana and playadeestacionamientohorario.idPlayaDeEstacionamiento = $idPlayaDeEstacionamiento");
+
+    $resultado3 = mysqli_num_rows($sql3);
+
+    if($resultado3 > 0){
+        $respuesta = $respuesta + "_errorHoraFin";
+    }
+
+    if($respuesta != ""){
+        echo json_encode(["data"=>"$respuesta"]);
+        exit();
+    }
 
         if(($idPlayaDeEstacionamiento!="")&&($diaSemana!="")&&($horaInicio!="")&&($horaFin!="")&&($nombreDia!="")){            
             $sqlEstacionamientoHorario = mysqli_query($conexionBD,"INSERT INTO playadeestacionamientohorario(idPlayaDeEstacionamiento, diaSemana, horaInicio, horaFin, nombreDia) VALUES ('$idPlayaDeEstacionamiento',
