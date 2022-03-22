@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 16-03-2022 a las 04:00:56
+-- Tiempo de generación: 22-03-2022 a las 03:01:42
 -- Versión del servidor: 8.0.21
 -- Versión de PHP: 7.4.9
 
@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS `estacionamiento` (
   KEY `fk_idPlayaDeEstacionamiento` (`idPlayaDeEstacionamiento`),
   KEY `fk_idPlayaDeEstacionamientoHorario` (`idPlayaDeEstacionamientoHorario`),
   KEY `fk_idUsuario` (`idUsuario`)
-) ENGINE=InnoDB AUTO_INCREMENT=94 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=111 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `estacionamiento`
@@ -60,7 +60,17 @@ INSERT INTO `estacionamiento` (`idEstacionamiento`, `idUsuario`, `idPlayaDeEstac
 (69, 34, 1, 24, '2022-03-15', '19:12:01', '19:12:05'),
 (70, 34, 1, 24, '2022-03-15', '19:46:53', '19:50:01'),
 (71, 34, 1, 24, '2022-03-15', '20:11:40', '20:11:42'),
-(93, 34, 1, 18, '2022-03-16', '00:02:27', NULL);
+(95, 34, 1, 27, '2022-03-18', '18:24:25', '18:27:33'),
+(96, 34, 1, 27, '2022-03-18', '18:28:00', '18:45:16'),
+(97, 34, 1, 27, '2022-03-18', '18:49:44', '19:00:03'),
+(98, 34, 1, 27, '2022-03-18', '19:05:12', '19:05:16'),
+(99, 34, 1, 27, '2022-03-18', '19:06:03', '19:06:10'),
+(100, 34, 1, 27, '2022-03-18', '19:25:56', '19:26:01'),
+(105, 34, 1, 27, '2022-03-18', '19:36:34', '19:36:37'),
+(106, 34, 1, 27, '2022-03-18', '19:39:04', '19:39:11'),
+(107, 34, 1, 27, '2022-03-18', '19:59:01', '19:59:04'),
+(108, 34, 1, 27, '2022-03-18', '19:59:08', '19:59:11'),
+(110, 34, 1, 23, '2022-03-21', '23:25:38', '23:25:49');
 
 -- --------------------------------------------------------
 
@@ -85,8 +95,8 @@ CREATE TABLE IF NOT EXISTS `playadeestacionamiento` (
 --
 
 INSERT INTO `playadeestacionamiento` (`idPlayaDeEstacionamiento`, `nombrePlayaDeEstacionamiento`, `ubicacion`, `capacidad`, `observaciones`, `mapa`, `lugaresLibres`) VALUES
-(1, 'Supermercado Dar', 'San Jeronimo y Tucuman', 20, 'Techado', 'https://goo.gl/maps/RENstzUGoocLY8rL8', 7),
-(2, 'Tucuman', 'Tucuman y San Martin', 100, 'Varios pisos', 'https://goo.gl/maps/3hkdT6aXGuq79NJi7', 99);
+(1, 'Supermercado Dar', 'San Jeronimo y Tucuman', 20, 'Techado', 'https://goo.gl/maps/RENstzUGoocLY8rL8', 20),
+(2, 'Tucuman', 'Tucuman y San Martin', 100, 'Varios pisos', 'https://goo.gl/maps/3hkdT6aXGuq79NJi7', 100);
 
 -- --------------------------------------------------------
 
@@ -101,6 +111,7 @@ CREATE TABLE IF NOT EXISTS `playadeestacionamientohorario` (
   `diaSemana` int NOT NULL,
   `horaInicio` time NOT NULL,
   `horaFin` time NOT NULL,
+  `nombreDia` varchar(20) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`idHorario`),
   KEY `fk_idPlayaDeEstacionamiento2` (`idPlayaDeEstacionamiento`)
 ) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -109,35 +120,35 @@ CREATE TABLE IF NOT EXISTS `playadeestacionamientohorario` (
 -- Volcado de datos para la tabla `playadeestacionamientohorario`
 --
 
-INSERT INTO `playadeestacionamientohorario` (`idHorario`, `idPlayaDeEstacionamiento`, `diaSemana`, `horaInicio`, `horaFin`) VALUES
-(1, 2, 0, '00:00:00', '15:59:59'),
-(2, 2, 1, '00:00:00', '15:59:59'),
-(3, 2, 2, '00:00:00', '15:59:59'),
-(4, 2, 3, '00:00:00', '15:59:59'),
-(5, 2, 4, '00:00:00', '15:59:59'),
-(6, 2, 5, '00:00:00', '15:59:59'),
-(7, 2, 6, '00:00:00', '15:59:59'),
-(8, 2, 0, '16:00:00', '23:59:59'),
-(9, 2, 1, '16:00:00', '23:59:59'),
-(10, 2, 2, '16:00:00', '23:59:59'),
-(11, 2, 3, '16:00:00', '23:59:59'),
-(12, 2, 4, '16:00:00', '23:59:59'),
-(13, 2, 5, '16:00:00', '23:59:59'),
-(14, 2, 6, '16:00:00', '23:59:59'),
-(15, 1, 0, '00:00:00', '12:00:00'),
-(16, 1, 1, '00:00:00', '12:00:00'),
-(17, 1, 2, '00:00:00', '12:00:00'),
-(18, 1, 3, '00:00:00', '12:00:00'),
-(19, 1, 4, '00:00:00', '12:00:00'),
-(20, 1, 5, '00:00:00', '12:00:00'),
-(21, 1, 6, '00:00:00', '12:00:00'),
-(22, 1, 0, '12:00:01', '23:59:59'),
-(23, 1, 1, '12:00:01', '23:59:59'),
-(24, 1, 2, '12:00:01', '23:59:59'),
-(25, 1, 3, '12:00:01', '23:59:59'),
-(26, 1, 4, '12:00:01', '23:59:59'),
-(27, 1, 5, '12:00:01', '23:59:59'),
-(30, 1, 6, '12:00:01', '23:59:59');
+INSERT INTO `playadeestacionamientohorario` (`idHorario`, `idPlayaDeEstacionamiento`, `diaSemana`, `horaInicio`, `horaFin`, `nombreDia`) VALUES
+(1, 2, 0, '00:00:00', '15:59:59', 'DOMINGO'),
+(2, 2, 1, '00:00:00', '15:59:59', 'LUNES'),
+(3, 2, 2, '00:00:00', '15:59:59', 'MARTES'),
+(4, 2, 3, '00:00:00', '15:59:59', 'MIERCOLES'),
+(5, 2, 4, '00:00:00', '15:59:59', 'JUEVES'),
+(6, 2, 5, '00:00:00', '15:59:59', 'VIERNES'),
+(7, 2, 6, '00:00:00', '15:59:59', 'SABADO'),
+(8, 2, 0, '16:00:00', '23:59:59', 'DOMINGO'),
+(9, 2, 1, '16:00:00', '23:59:59', 'LUNES'),
+(10, 2, 2, '16:00:00', '23:59:59', 'MARTES'),
+(11, 2, 3, '16:00:00', '23:59:59', 'MIERCOLES'),
+(12, 2, 4, '16:00:00', '23:59:59', 'JUEVES'),
+(13, 2, 5, '16:00:00', '23:59:59', 'VIERNES'),
+(14, 2, 6, '16:00:00', '23:59:59', 'SABADO'),
+(15, 1, 0, '00:00:00', '12:00:00', 'DOMINGO'),
+(16, 1, 1, '00:00:00', '12:00:00', 'LUNES'),
+(17, 1, 2, '00:00:00', '12:00:00', 'MARTES'),
+(18, 1, 3, '00:00:00', '12:00:00', 'MIERCOLES'),
+(19, 1, 4, '00:00:00', '12:00:00', 'JUEVES'),
+(20, 1, 5, '00:00:00', '12:00:00', 'VIERNES'),
+(21, 1, 6, '00:00:00', '12:00:00', 'SABADO'),
+(22, 1, 0, '12:00:01', '23:59:59', 'DOMINGO'),
+(23, 1, 1, '12:00:01', '23:59:59', 'LUNES'),
+(24, 1, 2, '12:00:01', '23:59:59', 'MARTES'),
+(25, 1, 3, '12:00:01', '23:59:59', 'MIERCOLES'),
+(26, 1, 4, '12:00:01', '23:59:59', 'JUEVES'),
+(27, 1, 5, '12:00:01', '23:59:59', 'VIERNES'),
+(30, 1, 6, '12:00:01', '23:59:59', 'SABADO');
 
 -- --------------------------------------------------------
 
