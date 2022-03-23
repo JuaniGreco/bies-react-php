@@ -29,6 +29,17 @@ function obtenerNumeroDia($nombreDelDia){
     };
 }
 
+function validarHorario($horaInicio, $horaFin){
+    include $conexionBD;
+    if($horaInicio > $horaFin){
+        $respuesta = "horaInicioMayor_";
+    }
+    if($horaInicio === $horaFin){
+        $respuesta = "horaIgual_";
+    }
+    return $respuesta;
+};
+
 // Consulta datos y recepciona una clave para consultar dichos datos con dicha clave
 if (isset($_GET["consultar"])){
     $sqlEstacionamientoHorario = mysqli_query($conexionBD,"SELECT ph.idHorario, ph.idPlayaDeEstacionamiento, pe.nombrePlayaDeEstacionamiento as 'nombrePlayaDeEstacionamiento', ph.nombreDia, ph.horaInicio, ph.horaFin FROM `playadeestacionamientohorario` ph LEFT JOIN playadeestacionamiento pe on pe.idPlayaDeEstacionamiento = ph.idPlayaDeEstacionamiento WHERE idHorario=".$_GET["consultar"]);
@@ -48,6 +59,8 @@ if (isset($_GET["borrar"])){
     }
     else{  echo json_encode(["success"=>0]); }
 }
+
+
 //Inserta un nuevo registro y recepciona en método post los datos de nombre y correo
 if(isset($_GET["insertar"])){
     $data = json_decode(file_get_contents("php://input"));
@@ -63,7 +76,6 @@ if(isset($_GET["insertar"])){
     FROM `playadeestacionamientohorario` 
     WHERE '$horaInicio' BETWEEN playadeestacionamientohorario.horaInicio and playadeestacionamientohorario.horaFin 
     and playadeestacionamientohorario.diaSemana = $diaSemana and playadeestacionamientohorario.idPlayaDeEstacionamiento = $idPlayaDeEstacionamiento");
-
     $resultado2 = mysqli_num_rows($sql2);
 
     if($resultado2 > 0){
