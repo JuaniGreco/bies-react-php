@@ -9,7 +9,7 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 // Conecta a la base de datos  con usuario, contraseña y nombre de la BD
 $servidor = "localhost"; $usuario = "root"; $contrasenia = ""; $nombreBaseDatos = "bies-react";
 $conexionBD = new mysqli($servidor, $usuario, $contrasenia, $nombreBaseDatos);
-$respuesta = "";
+$validar = '';
 
 function obtenerNumeroDia($nombreDelDia){
     if($nombreDelDia === "DOMINGO"){
@@ -29,13 +29,13 @@ function obtenerNumeroDia($nombreDelDia){
     };
 }
 
-function validarHorario($horaInicio, $horaFin, $diaSemana, $idPlayaDeEstacionamiento, $conexionBD, $respuesta){
+function validarHorario($horaInicio, $horaFin, $diaSemana, $idPlayaDeEstacionamiento, $conexionBD, $validar){
 
     if($horaInicio > $horaFin){
-        $respuesta = "La hora de inicio es mayor a la hora fin.\n";
+        $validar .= "La hora de inicio es mayor a la hora fin.\n";
     }
     if($horaInicio === $horaFin){
-        $respuesta = "Las horas de inicio y de fin son iguales.\n";
+        $validar .= "Las horas de inicio y de fin son iguales.\n";
     }
     $sql2 = mysqli_query($conexionBD,"SELECT *
     FROM `playadeestacionamientohorario` 
@@ -44,7 +44,7 @@ function validarHorario($horaInicio, $horaFin, $diaSemana, $idPlayaDeEstacionami
     $resultado2 = mysqli_num_rows($sql2);
 
     if($resultado2 > 0){
-        $respuesta = "La hora inicio está dentro de otro horario.\n";
+        $validar .= "La hora inicio está dentro de otro horario.\n";
     }
 
     $sql3 = mysqli_query($conexionBD,"SELECT *
@@ -55,9 +55,14 @@ function validarHorario($horaInicio, $horaFin, $diaSemana, $idPlayaDeEstacionami
     $resultado3 = mysqli_num_rows($sql3);
 
     if($resultado3 > 0){
-        $respuesta = $respuesta + "La hora fin está dentro de otro horario.\n";
+        $validar .= "La hora fin está dentro de otro horario.\n";
     }
-    return $respuesta;
+
+    if($validar === ''){
+        $validar === "ok";
+    }
+    error_log ($validar, 3, 'D:\validarHorario.txt');
+    return $validar;
 };
 
 // Consulta datos y recepciona una clave para consultar dichos datos con dicha clave
@@ -84,26 +89,24 @@ if (isset($_GET["borrar"])){
 //Inserta un nuevo registro y recepciona en método post los datos de nombre y correo
 if(isset($_GET["insertar"])){
     $data = json_decode(file_get_contents("php://input"));
-    
-    $idPlayaDeEstacionamiento = $data ->idPlayaDeEstacionamiento;
-    $nombreDia=$data->nombreDia;
-    $horaInicio=$data->horaInicio;
-    $horaFin=$data->horaFin;
+
+    $idPlayaDeEstacionamiento=$_GET["idPlayaDeEstacionamiento"];
+    $nombreDia=$_GET["nombreDia"];
+    $horaInicio=$_GET["horaInicio"];
+    $horaFin=$_GET["horaFin"];
     $nombreDia = strtoupper($nombreDia);
     $diaSemana = obtenerNumeroDia($nombreDia);
 
-    $validar = "ok";
-    $validar = validarHorario($horaInicio, $horaFin, $diaSemana, $idPlayaDeEstacionamiento, $conexionBD, $respuesta);
+    $respuesta = validarHorario($horaInicio, $horaFin, $diaSemana, $idPlayaDeEstacionamiento, $conexionBD, $validar);
     
-    if($validar != "ok"){
-        echo json_encode(["data"=>"$validar"]);
+    if($respuesta != "ok"){
+        echo json_encode(["data"=>"$respuesta"]);
         exit();
     }
-
         if(($idPlayaDeEstacionamiento!="")&&($diaSemana!="")&&($horaInicio!="")&&($horaFin!="")&&($nombreDia!="")){            
             $sqlEstacionamientoHorario = mysqli_query($conexionBD,"INSERT INTO playadeestacionamientohorario(idPlayaDeEstacionamiento, diaSemana, horaInicio, horaFin, nombreDia) VALUES ('$idPlayaDeEstacionamiento',
             '$diaSemana', '$horaInicio', '$horaFin', '$nombreDia')");
-            echo json_encode(["data"=>"$validar"]);
+            echo json_encode(["data"=>"$respuesta"]);
         }
     exit();
 }
@@ -113,17 +116,17 @@ if(isset($_GET["actualizar"])){
     $data = json_decode(file_get_contents("php://input"));
 
     $idHorario=(isset($data->idHorario))?$data->idHorario:$_GET["actualizar"];
-    $idPlayaDeEstacionamiento=$data->idPlayaDeEstacionamiento;
-    $horaInicio=$data->horaInicio;
-    $horaFin = $data->horaFin;
-    $nombreDia = $data->nombreDia;
+    $idPlayaDeEstacionamiento=$_GET["idPlayaDeEstacionamiento"];
+    $horaInicio=$_GET["horaInicio"];
+    $horaFin = $_GET["horaFin"];
+    $nombreDia = $_GET["nombreDia"];
     $nombreDia = strtoupper($nombreDia);
     $diaSemana = obtenerNumeroDia($nombreDia);
-    $validar = "ok";
-    $validar = validarHorario($horaInicio, $horaFin, $diaSemana, $idPlayaDeEstacionamiento, $conexionBD, $respuesta);
+    $validar = "";
+    $respuesta = validarHorario($horaInicio, $horaFin, $diaSemana, $idPlayaDeEstacionamiento, $conexionBD, $validar);
     
-    if($validar != "ok"){
-        echo json_encode(["data"=>"$validar"]);
+    if($respuesta != "ok"){
+        echo json_encode(["data"=>"$respuesta"]);
         exit();
     } else 
         $sqlEstacionamientoHorario = mysqli_query($conexionBD,"UPDATE playadeestacionamientohorario SET idPlayaDeEstacionamiento='$idPlayaDeEstacionamiento', diaSemana='$diaSemana', horaInicio='$horaInicio', horaFin='$horaFin', nombreDia='$nombreDia' WHERE idHorario='$idHorario'");
@@ -140,7 +143,9 @@ if(mysqli_num_rows($sqlEstacionamientoHorario) > 0){
     $estacionamientoHorario = mysqli_fetch_all($sqlEstacionamientoHorario,MYSQLI_ASSOC);
     echo json_encode($estacionamientoHorario);
 }
-else{ echo json_encode([["success"=>0]]); }
+else { 
+    echo json_encode([["data"=>"ok"]]); 
+}
 
 
 ?>
