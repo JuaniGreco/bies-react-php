@@ -9,7 +9,7 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 // Conecta a la base de datos  con usuario, contraseña y nombre de la BD
 $servidor = "localhost"; $usuario = "root"; $contrasenia = ""; $nombreBaseDatos = "bies-react";
 $conexionBD = new mysqli($servidor, $usuario, $contrasenia, $nombreBaseDatos);
-$validar = '';
+$validar = "";
 
 function obtenerNumeroDia($nombreDelDia){
     if($nombreDelDia === "DOMINGO"){
@@ -58,7 +58,7 @@ function validarHorario($horaInicio, $horaFin, $diaSemana, $idPlayaDeEstacionami
         $validar .= "La hora fin está dentro de otro horario.\n";
     }
 
-    if($validar === ''){
+    if($validar === ""){
         $validar === "ok";
     }
     error_log ($validar, 3, 'D:\validarHorario.txt');
@@ -100,13 +100,13 @@ if(isset($_GET["insertar"])){
     $respuesta = validarHorario($horaInicio, $horaFin, $diaSemana, $idPlayaDeEstacionamiento, $conexionBD, $validar);
     
     if($respuesta != "ok"){
-        echo json_encode(["data"=>"$respuesta"]);
+        echo json_encode(["data"=>"$respuesta"], JSON_UNESCAPED_UNICODE);
         exit();
     }
         if(($idPlayaDeEstacionamiento!="")&&($diaSemana!="")&&($horaInicio!="")&&($horaFin!="")&&($nombreDia!="")){            
             $sqlEstacionamientoHorario = mysqli_query($conexionBD,"INSERT INTO playadeestacionamientohorario(idPlayaDeEstacionamiento, diaSemana, horaInicio, horaFin, nombreDia) VALUES ('$idPlayaDeEstacionamiento',
             '$diaSemana', '$horaInicio', '$horaFin', '$nombreDia')");
-            echo json_encode(["data"=>"$respuesta"]);
+            echo json_encode(["data"=>"$respuesta"], JSON_UNESCAPED_UNICODE);
         }
     exit();
 }
@@ -126,12 +126,12 @@ if(isset($_GET["actualizar"])){
     $respuesta = validarHorario($horaInicio, $horaFin, $diaSemana, $idPlayaDeEstacionamiento, $conexionBD, $validar);
     
     if($respuesta != "ok"){
-        echo json_encode(["data"=>"$respuesta"]);
+        echo json_encode(["data"=>"$respuesta"], JSON_UNESCAPED_UNICODE);
         exit();
     } else 
         $sqlEstacionamientoHorario = mysqli_query($conexionBD,"UPDATE playadeestacionamientohorario SET idPlayaDeEstacionamiento='$idPlayaDeEstacionamiento', diaSemana='$diaSemana', horaInicio='$horaInicio', horaFin='$horaFin', nombreDia='$nombreDia' WHERE idHorario='$idHorario'");
         if($sqlEstacionamientoHorario){
-            echo json_encode(["data"=>"ok"]);
+            echo json_encode(["data"=>"ok"], JSON_UNESCAPED_UNICODE);
         }
     exit();
     }
