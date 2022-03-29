@@ -62,7 +62,18 @@ if(isset($_GET["actualizar"])){
     echo json_encode(["success"=>1]);
     exit();
 }
-// Consulta todos los registros de la tabla empleados
+
+if(isset($_GET["listar"])){
+    $data = json_decode(file_get_contents("php://input"));
+    $sqlEstacionamiento = mysqli_query($conexionBD,"SELECT pe.idPlayaDeEstacionamiento, pe.nombrePlayaDeEstacionamiento FROM playadeestacionamiento pe");
+    if(mysqli_num_rows($sqlEstacionamiento) > 0){
+        $sqlEstacionamiento = mysqli_fetch_all($sqlEstacionamiento,MYSQLI_ASSOC);
+        echo json_encode($sqlEstacionamiento);
+        exit();
+    }
+    else{  echo json_encode(["data" => $sqlEstacionamiento]); }
+}
+// Consulta todos los registros de la tabla 
 $sqlEstacionamiento = mysqli_query($conexionBD,"SELECT * FROM playadeestacionamiento ");
 if(mysqli_num_rows($sqlEstacionamiento) > 0){
     $estacionamiento = mysqli_fetch_all($sqlEstacionamiento,MYSQLI_ASSOC);
