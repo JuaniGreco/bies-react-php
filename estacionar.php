@@ -82,7 +82,7 @@ $horaActual=date_format($horaActual, 'H:i:s');
         } else {// puede traer error, manda 0 al front
                 $respuesta = "ya_estacionado";
         };
-        echo json_encode(["data"=>"$respuesta"]);;
+        echo json_encode(["data"=>"$respuesta"]);
         exit();
     }
 
