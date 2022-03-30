@@ -58,6 +58,13 @@ function validarHorario($horaInicio, $horaFin, $diaSemana, $idPlayaDeEstacionami
         $validar .= "La hora fin está dentro de otro horario.\n";
     }
 
+    $sql4 = mysqli_query($conexionBD,"SELECT * FROM `playadeestacionamientohorario` WHERE playadeestacionamientohorario.horaInicio = '$horaInicio' and playadeestacionamientohorario.horaFin '$horaFin' and playadeestacionamientohorario.diaSemana = $diaSemana and playadeestacionamientohorario.idPlayaDeEstacionamiento = $idPlayaDeEstacionamiento");
+    $resultado4 = mysqli_num_rows($sql4);
+
+    if($resultado4 > 0){
+        $validar .= "La hora inicio y fin son iguales a las de otro horario.\n";
+    }
+
     if($validar === ""){
         $validar === "ok";
     }
