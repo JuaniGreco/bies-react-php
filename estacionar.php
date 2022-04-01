@@ -7,8 +7,16 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 
 
 // Conecta a la base de datos  con usuario, contraseña y nombre de la BD
-$servidor = "localhost"; $usuario = "root"; $contrasenia = ""; $nombreBaseDatos = "bies-react";
-$conexionBD = new mysqli($servidor, $usuario, $contrasenia, $nombreBaseDatos);
+//$servidor = "localhost"; $usuario = "root"; $contrasenia = ""; $nombreBaseDatos = "bies-react";
+//$conexionBD = new mysqli($servidor, $usuario, $contrasenia, $nombreBaseDatos);
+$method = $_SERVER['REQUEST_METHOD'];
+    include "conectar.php";
+    $conexionBD = conectarDB();
+	$JSONData = file_get_contents("php://input");
+	$dataObject = json_decode($JSONData);    
+    session_start();    
+    $conexionBD->set_charset('utf8');
+
 date_default_timezone_set("America/Argentina/Buenos_Aires");
 $respuesta = "";
 $fechaActual=date("Y-m-d");

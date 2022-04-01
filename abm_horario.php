@@ -5,10 +5,19 @@ header("Access-Control-Allow-Methods: GET,POST");
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
+$method = $_SERVER['REQUEST_METHOD'];
+    include "conectar.php";
+
+    $conexionBD = conectarDB();
+    //sleep(1);	
+	$JSONData = file_get_contents("php://input");
+	$dataObject = json_decode($JSONData);    
+    session_start();    
+    $conexionBD->set_charset('utf8');
 
 // Conecta a la base de datos  con usuario, contraseña y nombre de la BD
-$servidor = "localhost"; $usuario = "root"; $contrasenia = ""; $nombreBaseDatos = "bies-react";
-$conexionBD = new mysqli($servidor, $usuario, $contrasenia, $nombreBaseDatos);
+//$servidor = "localhost"; $usuario = "root"; $contrasenia = ""; $nombreBaseDatos = "bies-react";
+//$conexionBD = new mysqli($servidor, $usuario, $contrasenia, $nombreBaseDatos);
 $validar = "";
 
 function obtenerNumeroDia($nombreDelDia){
