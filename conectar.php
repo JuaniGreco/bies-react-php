@@ -5,18 +5,27 @@ header("Content-Type: text/html; charset=utf-8");
 $method = $_SERVER['REQUEST_METHOD'];
 
 function conectarDB(){
+    /*
     $servidor = "localhost";
     $usuario = "root";
     $password = "";
     $bd = "bies-react";
-    $conexion = mysqli_connect($servidor, $usuario, $password,$bd);
+    $conexionBD = mysqli_connect($servidor, $usuario, $password,$bd);
+    */
+
+    $servidor = "localhost";
+    $usuario = "id18437891_root";
+    $password = "9A+!NvyJr7Cv[d8{";
+    $bd = "id18437891_biesreact";
+    $conexionBD = mysqli_connect($servidor, $usuario, $password,$bd);
+
     
-        if($conexion){
+        if($conexionBD){
             echo "";
         }else{
             echo 'Ha sucedido un error inesperado en la conexion de la base de datos';
         }
 
-    return $conexion;
+    return $conexionBD;
 }
 ?>
