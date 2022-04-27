@@ -8,17 +8,17 @@ header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
   $method = $_SERVER['REQUEST_METHOD'];
     include "conectar.php";
 
-    $mysqli = conectarDB();
+    $conexionDB = conectarDB();
     //sleep(1);	
 	$JSONData = file_get_contents("php://input");
 	$dataObject = json_decode($JSONData);    
     session_start();    
-    $mysqli->set_charset('utf8');
+    $conexionDB->set_charset('utf8');
 
 	$dni = $dataObject-> dni;
 	$pas =	$dataObject-> clave;
   
-  if ($nueva_consulta = $mysqli->prepare("SELECT 
+  if ($nueva_consulta = $conexionDB->prepare("SELECT 
   u.idUsuario, u.nombre, u.dni, u.clave, u.email, u.idRol, r.nombreRol
   FROM usuarios u
   INNER JOIN roles r ON u.idRol = r.idRol
@@ -48,5 +48,5 @@ header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
       else{
         echo json_encode(array('conectado'=>false, 'error' => 'No se pudo conectar a BD'));
       }
-$mysqli->close();
+$conexionDB->close();
 ?>
