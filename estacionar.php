@@ -104,7 +104,7 @@ $horaActual=date_format($horaActual, 'H:i:s');
         $resultado3 = mysqli_num_rows($sql3);
 
         if($resultado3 != 0){
-            $sql2= mysqli_query ($conexionBD, "UPDATE `playadeestacionamiento` SET `lugaresLibres` = (playadeestacionamiento.lugaresLibres + 1) WHERE playadeestacionamiento.idPlayaDeEstacionamiento = (SELECT estacionamiento.idPlayaDeEstacionamiento FROM estacionamiento WHERE estacionamiento.idUsuario = '34' and estacionamiento.fechaEstacionamiento = '2022-03-18' and estacionamiento.horaFinEstacionamiento is null)");
+            $sql2= mysqli_query ($conexionBD, "UPDATE `playadeestacionamiento` SET `lugaresLibres` = (playadeestacionamiento.lugaresLibres + 1) WHERE playadeestacionamiento.idPlayaDeEstacionamiento = (SELECT estacionamiento.idPlayaDeEstacionamiento FROM estacionamiento WHERE estacionamiento.idUsuario = '$idUsuario' and estacionamiento.fechaEstacionamiento = '$fechaActual' and estacionamiento.horaFinEstacionamiento is null)");
             $sql = mysqli_query($conexionBD,"UPDATE `estacionamiento` SET `horaFinEstacionamiento` = '$horaActual' WHERE idUsuario = $idUsuario and fechaEstacionamiento = '$fechaActual' and horaFinEstacionamiento is null");
             $respuesta = "desestacionado";
         } else {
@@ -115,8 +115,6 @@ $horaActual=date_format($horaActual, 'H:i:s');
         
     $conexionBD->close();
     exit();
-
-
 
 /*
 error_log ($idUsuario, 3, 'D:\ID.txt');
@@ -154,5 +152,5 @@ header('Content-Type: application/json');
 //Codifica y retorna en formato json el array
 
 //cierra la conexion
-$conn->close();*/
+*/
 ?>
