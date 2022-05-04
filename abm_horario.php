@@ -5,10 +5,19 @@ header("Access-Control-Allow-Methods: GET,POST");
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
+$method = $_SERVER['REQUEST_METHOD'];
+    include "conectar.php";
+
+    $conexionBD = conectarDB();
+    //sleep(1);	
+	$JSONData = file_get_contents("php://input");
+	$dataObject = json_decode($JSONData);    
+    session_start();    
+    $conexionBD->set_charset('utf8');
 
 // Conecta a la base de datos  con usuario, contraseña y nombre de la BD
-$servidor = "localhost"; $usuario = "root"; $contrasenia = ""; $nombreBaseDatos = "bies-react";
-$conexionBD = new mysqli($servidor, $usuario, $contrasenia, $nombreBaseDatos);
+//$servidor = "localhost"; $usuario = "root"; $contrasenia = ""; $nombreBaseDatos = "bies-react";
+//$conexionBD = new mysqli($servidor, $usuario, $contrasenia, $nombreBaseDatos);
 $validar = "";
 
 function obtenerNumeroDia($nombreDelDia){
@@ -68,7 +77,6 @@ function validarHorario($horaInicio, $horaFin, $diaSemana, $idPlayaDeEstacionami
     if($validar === ""){
         $validar = "ok";
     }
-    error_log ($validar, 3, 'D:\validarHorario.txt');
     return $validar;
 };
 
@@ -96,11 +104,10 @@ if (isset($_GET["borrar"])){
 //Inserta un nuevo registro y recepciona en método post los datos de nombre y correo
 if(isset($_GET["insertar"])){
     $data = json_decode(file_get_contents("php://input"));
-
-    $idPlayaDeEstacionamiento=$_GET["idPlayaDeEstacionamiento"];
-    $nombreDia=$_GET["nombreDia"];
-    $horaInicio=$_GET["horaInicio"];
-    $horaFin=$_GET["horaFin"];
+    $idPlayaDeEstacionamiento=$data->idPlayaDeEstacionamiento;
+    $nombreDia=$data->nombreDia;
+    $horaInicio=$data->horaInicio;
+    $horaFin=$data->horaFin;
     $nombreDia = strtoupper($nombreDia);
     $diaSemana = obtenerNumeroDia($nombreDia);
 
@@ -123,10 +130,10 @@ if(isset($_GET["actualizar"])){
     $data = json_decode(file_get_contents("php://input"));
 
     $idHorario=(isset($data->idHorario))?$data->idHorario:$_GET["actualizar"];
-    $idPlayaDeEstacionamiento=$_GET["idPlayaDeEstacionamiento"];
-    $horaInicio=$_GET["horaInicio"];
-    $horaFin = $_GET["horaFin"];
-    $nombreDia = $_GET["nombreDia"];
+    $idPlayaDeEstacionamiento=$data->idPlayaDeEstacionamiento;
+    $horaInicio=$data->horaInicio;
+    $horaFin = $data->horaFin;
+    $nombreDia = $data->nombreDia;
     $nombreDia = strtoupper($nombreDia);
     $diaSemana = obtenerNumeroDia($nombreDia);
     $validar = "";
